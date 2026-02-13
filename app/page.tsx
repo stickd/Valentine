@@ -5,16 +5,14 @@ import HeartGame from "../components/HeartGame";
 
 export default function Home() {
   const [caught, setCaught] = useState(false);
-  const [showGallery, setShowGallery] = useState(false);
 
   return (
     <div>
-      {!caught ? (
-        <HeartGame onCaught={() => setCaught(true)} />
-      ) : !showGallery ? (
-        <LoveScroll text={loveText} onArrowClick={() => setShowGallery(true)} />
-      ) : (
-        <PhotoGallery />
+      <HeartGame onCaught={() => setCaught(true)} />
+      {caught && (
+        <div className="text-center mt-10 text-2xl text-pink-700">
+          🎉 Ти спіймала серце! ❤️
+        </div>
       )}
     </div>
   );
