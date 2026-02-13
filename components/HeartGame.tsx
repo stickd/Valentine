@@ -6,12 +6,13 @@ import { motion, AnimatePresence } from "framer-motion";
 /* =========================
    LoveScroll
 ========================= */
-interface LoveScrollProps {
+function LoveScroll({
+  text,
+  onArrowClick,
+}: {
   text: string;
   onArrowClick: () => void;
-}
-
-function LoveScroll({ text, onArrowClick }: LoveScrollProps) {
+}) {
   const [displayed, setDisplayed] = useState("");
   const [isFinished, setIsFinished] = useState(false);
   const index = useRef(0);
@@ -69,7 +70,7 @@ function PhotoGallery() {
 
   useEffect(() => {
     let frame: number;
-    const speed = 0.5;
+    const speed = 0.4;
 
     const scrollDown = () => {
       const container = containerRef.current;
@@ -129,11 +130,7 @@ function PhotoGallery() {
 /* =========================
    HeartGame
 ========================= */
-interface HeartGameProps {
-  onCaught?: () => void;
-}
-
-export default function HeartGame({ onCaught }: HeartGameProps) {
+export default function HeartGame() {
   const [showRules, setShowRules] = useState(true);
   const [showHeart, setShowHeart] = useState(false);
   const [victory, setVictory] = useState(false);
@@ -207,8 +204,7 @@ export default function HeartGame({ onCaught }: HeartGameProps) {
       setVictory(true);
       if (animationRef.current !== null)
         cancelAnimationFrame(animationRef.current);
-      if (onCaught) onCaught(); // виклик пропса
-      setTimeout(() => setShowScroll(true), 2000);
+      setTimeout(() => setShowScroll(true), 3000);
     }
   };
 
