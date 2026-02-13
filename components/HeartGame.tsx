@@ -6,13 +6,12 @@ import { motion, AnimatePresence } from "framer-motion";
 /* =========================
    LoveScroll
 ========================= */
-function LoveScroll({
-  text,
-  onArrowClick,
-}: {
+type LoveScrollProps = {
   text: string;
   onArrowClick: () => void;
-}) {
+};
+
+function LoveScroll({ text, onArrowClick }: LoveScrollProps) {
   const [displayed, setDisplayed] = useState("");
   const [isFinished, setIsFinished] = useState(false);
   const index = useRef(0);
@@ -70,7 +69,7 @@ function PhotoGallery() {
 
   useEffect(() => {
     let frame: number;
-    const speed = 0.4; // ніжний повільний скрол
+    const speed = 0.4; // повільний скрол
 
     const scrollDown = () => {
       const container = containerRef.current;
@@ -117,7 +116,7 @@ function PhotoGallery() {
             transition={{ duration: 2 }}
             className="mt-20 text-center text-pink-700 font-bold text-4xl md:text-6xl leading-tight"
           >
-            Я тебе люблю <br />З днем Днем Святого Валентину! 💗
+            Я тебе люблю <br />З Днем Святого Валентина! 💗
           </motion.div>
         )}
       </AnimatePresence>
@@ -130,7 +129,11 @@ function PhotoGallery() {
 /* =========================
    HeartGame
 ========================= */
-export default function HeartGame() {
+type HeartGameProps = {
+  onCaught?: () => void;
+};
+
+export default function HeartGame({ onCaught }: HeartGameProps) {
   const [showRules, setShowRules] = useState(true);
   const [showHeart, setShowHeart] = useState(false);
   const [victory, setVictory] = useState(false);
@@ -202,12 +205,14 @@ export default function HeartGame() {
     } else {
       setVictory(true);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      if (onCaught) onCaught();
       setTimeout(() => setShowScroll(true), 3000);
     }
   };
 
   return (
     <div className="relative w-screen h-screen flex justify-center items-center overflow-hidden bg-pink-100">
+      {/* Rules */}
       <AnimatePresence>
         {showRules && (
           <motion.div
@@ -224,6 +229,7 @@ export default function HeartGame() {
         )}
       </AnimatePresence>
 
+      {/* Heart */}
       <AnimatePresence>
         {showHeart && !victory && (
           <motion.div
@@ -242,6 +248,7 @@ export default function HeartGame() {
         )}
       </AnimatePresence>
 
+      {/* Victory */}
       <AnimatePresence>
         {victory && !showScroll && (
           <motion.div
@@ -254,10 +261,12 @@ export default function HeartGame() {
         )}
       </AnimatePresence>
 
+      {/* Text */}
       {showScroll && !showGallery && (
         <LoveScroll text={loveText} onArrowClick={() => setShowGallery(true)} />
       )}
 
+      {/* Gallery */}
       {showGallery && <PhotoGallery />}
     </div>
   );
