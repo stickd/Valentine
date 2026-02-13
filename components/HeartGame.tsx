@@ -6,12 +6,13 @@ import { motion, AnimatePresence } from "framer-motion";
 /* =========================
    LoveScroll
 ========================= */
-type LoveScrollProps = {
+function LoveScroll({
+  text,
+  onArrowClick,
+}: {
   text: string;
   onArrowClick: () => void;
-};
-
-function LoveScroll({ text, onArrowClick }: LoveScrollProps) {
+}) {
   const [displayed, setDisplayed] = useState("");
   const [isFinished, setIsFinished] = useState(false);
   const index = useRef(0);
@@ -69,7 +70,7 @@ function PhotoGallery() {
 
   useEffect(() => {
     let frame: number;
-    const speed = 0.4; // повільний скрол
+    const speed = 0.4;
 
     const scrollDown = () => {
       const container = containerRef.current;
@@ -100,7 +101,7 @@ function PhotoGallery() {
         <motion.img
           key={index}
           src={src}
-          alt="memory"
+          alt={`memory ${index + 1}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
@@ -129,11 +130,7 @@ function PhotoGallery() {
 /* =========================
    HeartGame
 ========================= */
-type HeartGameProps = {
-  onCaught?: () => void;
-};
-
-export default function HeartGame({ onCaught }: HeartGameProps) {
+export default function HeartGame() {
   const [showRules, setShowRules] = useState(true);
   const [showHeart, setShowHeart] = useState(false);
   const [victory, setVictory] = useState(false);
@@ -141,7 +138,7 @@ export default function HeartGame({ onCaught }: HeartGameProps) {
   const [showGallery, setShowGallery] = useState(false);
   const [attempts, setAttempts] = useState(0);
 
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | null>(null);
   const [position, setPosition] = useState({ x: 100, y: 100 });
 
   const velocity = useRef({
@@ -191,7 +188,8 @@ export default function HeartGame({ onCaught }: HeartGameProps) {
       animationRef.current = requestAnimationFrame(animateHeart);
 
     return () => {
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      if (animationRef.current !== null)
+        cancelAnimationFrame(animationRef.current);
     };
   }, [showHeart, victory, screenWidth, screenHeight]);
 
@@ -204,8 +202,8 @@ export default function HeartGame({ onCaught }: HeartGameProps) {
       });
     } else {
       setVictory(true);
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
-      if (onCaught) onCaught();
+      if (animationRef.current !== null)
+        cancelAnimationFrame(animationRef.current);
       setTimeout(() => setShowScroll(true), 3000);
     }
   };
@@ -261,12 +259,12 @@ export default function HeartGame({ onCaught }: HeartGameProps) {
         )}
       </AnimatePresence>
 
-      {/* Text */}
+      {/* LoveScroll */}
       {showScroll && !showGallery && (
         <LoveScroll text={loveText} onArrowClick={() => setShowGallery(true)} />
       )}
 
-      {/* Gallery */}
+      {/* PhotoGallery */}
       {showGallery && <PhotoGallery />}
     </div>
   );
