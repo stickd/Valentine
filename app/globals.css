@@ -24,3 +24,7 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* Рукописний шрифт для романтичних надписів */
+.font-handwritten {
+  font-family: var(--font-handwritten), cursive;
+}
